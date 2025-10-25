@@ -314,7 +314,7 @@ class IntegerDivision(Operation):
         """
         self.validate_operands(a, b)
         # The '//' operator performs floor division in Python
-        return a // b
+        return (a / b).to_integral_value(rounding='ROUND_FLOOR')
 
     
 class OperationFactory:
