@@ -12,7 +12,6 @@ from app.operations import (
     Power,
     Root,
     OperationFactory,
-    Modulus,
 )
 
 
@@ -183,34 +182,6 @@ class TestRoot(BaseOperationTest):
     }
 
 
-class TestModulus(BaseOperationTest):
-    """Test Modulus (Remainder) operation."""
-
-    # 🌟 Assign the new operation class
-    operation_class = Modulus
-    
-    # 🌟 Test cases for valid modulus operations
-    valid_test_cases = {
-        "positive_remainder": {"a": "10", "b": "3", "expected": "1"},
-        "zero_remainder": {"a": "10", "b": "5", "expected": "0"},
-        "dividend_smaller": {"a": "3", "b": "10", "expected": "3"},
-        "negative_dividend": {"a": "-10", "b": "3", "expected": "2"},  # -10 = 3 * (-4) + 2
-        "negative_divisor": {"a": "10", "b": "-3", "expected": "-2"},  # 10 = -3 * (-3) + (-2)
-        "decimals": {"a": "10.5", "b": "3.5", "expected": "0.0"},
-        "decimals_remainder": {"a": "10.0", "b": "3.0", "expected": "1.0"},
-        "float_modulus": {"a": "10.5", "b": "3.0", "expected": "1.5"},
-    }
-    
-    # 🌟 Test case for modulus by zero
-    invalid_test_cases = {
-        "modulus_by_zero": {
-            "a": "5",
-            "b": "0",
-            "error": ValidationError,
-            "message": "Modulus by zero is not allowed"
-        },
-    }
-
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 
@@ -223,7 +194,6 @@ class TestOperationFactory:
             'divide': Division,
             'power': Power,
             'root': Root,
-            'modulus': Modulus,
         }
 
         for op_name, op_class in operation_map.items():
