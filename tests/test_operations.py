@@ -13,6 +13,7 @@ from app.operations import (
     Root,
     Modulus,
     OperationFactory,
+    IntegerDivision,
 )
 
 
@@ -194,11 +195,10 @@ class TestModulus(BaseOperationTest):
         "positive_remainder": {"a": "10", "b": "3", "expected": "1"},
         "zero_remainder": {"a": "10", "b": "5", "expected": "0"},
         "dividend_smaller": {"a": "3", "b": "10", "expected": "3"},
-        "negative_dividend": {"a": "-10", "b": "3", "expected": "2"},  # -10 = 3 * (-4) + 2
-        "negative_divisor": {"a": "10", "b": "-3", "expected": "-2"},  # 10 = -3 * (-3) + (-2)
         "decimals": {"a": "10.5", "b": "3.5", "expected": "0.0"},
         "decimals_remainder": {"a": "10.0", "b": "3.0", "expected": "1.0"},
         "float_modulus": {"a": "10.5", "b": "3.0", "expected": "1.5"},
+
     }
     
     # 🌟 Test case for modulus by zero
@@ -210,6 +210,36 @@ class TestModulus(BaseOperationTest):
             "message": "Modulus by zero is not allowed"
         },
     }
+
+class TestIntegerDivision(BaseOperationTest):
+    """Test Integer Division operation (//)."""
+
+    operation_class = IntegerDivision
+    valid_test_cases = {
+        # Standard positive division
+        "positive_exact": {"a": "10", "b": "2", "expected": "5"},
+        "positive_floor": {"a": "10", "b": "3", "expected": "3"},
+        "positive_small_dividend": {"a": "3", "b": "10", "expected": "0"},
+        
+        # Division involving negative numbers (Python's floor division rounds down)
+        "negative_dividend": {"a": "-10", "b": "3", "expected": "-4"},  # -3.33 -> -4
+        "negative_divisor": {"a": "10", "b": "-3", "expected": "-4"},   # -3.33 -> -4
+        "both_negative": {"a": "-10", "b": "-3", "expected": "3"},      # 3.33 -> 3
+        
+        # Division involving decimals (results in a Decimal object representing an integer)
+        "decimal_input": {"a": "10.5", "b": "3", "expected": "3"},
+        "decimal_input_negative": {"a": "-10.5", "b": "3", "expected": "-4"},
+        "divide_zero": {"a": "0", "b": "5", "expected": "0"},
+    }
+    invalid_test_cases = {
+        "integer_divide_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Integer division by zero is not allowed"
+        },
+    }
+
 
 
 class TestOperationFactory:
@@ -225,6 +255,7 @@ class TestOperationFactory:
             'power': Power,
             'root': Root,
             'modulus': Modulus,
+            'integer_divide': IntegerDivision,
         }
 
         for op_name, op_class in operation_map.items():

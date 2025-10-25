@@ -283,6 +283,40 @@ class Modulus(Operation):
         # The built-in Python '%' operator performs the modulus operation
         return a % b
     
+class IntegerDivision(Operation):
+    """
+    Integer Division (Floor Division) operation implementation.
+
+    Performs division and returns the largest integer less than or equal to the quotient.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for integer division by zero.
+
+        Raises:
+            ValidationError: If the divisor is zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Integer division by zero is not allowed")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Divide two numbers and return the integer floor.
+
+        Args:
+            a (Decimal): Dividend.
+            b (Decimal): Divisor.
+
+        Returns:
+            Decimal: The floor of the quotient.
+        """
+        self.validate_operands(a, b)
+        # The '//' operator performs floor division in Python
+        return a // b
+
+    
 class OperationFactory:
     """
     Factory class for creating operation instances.
@@ -300,7 +334,8 @@ class OperationFactory:
         'divide': Division,
         'power': Power,
         'root': Root,
-        'modulus': Modulus
+        'modulus': Modulus,
+        'integer_divide': IntegerDivision
     }
 
     @classmethod
