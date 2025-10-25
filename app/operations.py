@@ -316,6 +316,36 @@ class IntegerDivision(Operation):
         # The '//' operator performs floor division in Python
         return (a / b).to_integral_value(rounding='ROUND_FLOOR')
 
+class Percentage(Operation):
+    """
+    Percentage Calculation operation implementation.
+
+    Computes (a / b) * 100.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for division by zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Percentage calculation with zero divisor is not allowed")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Calculate the percentage of a with respect to b.
+
+        Args:
+            a (Decimal): Numerator (part).
+            b (Decimal): Denominator (whole).
+
+        Returns:
+            Decimal: (a / b) * 100.
+        """
+        self.validate_operands(a, b)
+        # Calculate (a / b) * 100
+        return (a / b) * Decimal('100')
+
     
 class OperationFactory:
     """
@@ -335,7 +365,8 @@ class OperationFactory:
         'power': Power,
         'root': Root,
         'modulus': Modulus,
-        'integer_divide': IntegerDivision
+        'integer_divide': IntegerDivision,
+        'percentage': Percentage
     }
 
     @classmethod

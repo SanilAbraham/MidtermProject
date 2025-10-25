@@ -12,6 +12,7 @@ from app.operations import (
     Power,
     Root,
     Modulus,
+    Percentage,
     OperationFactory,
     IntegerDivision,
 )
@@ -237,6 +238,30 @@ class TestIntegerDivision(BaseOperationTest):
             "b": "0",
             "error": ValidationError,
             "message": "Integer division by zero is not allowed"
+        },
+    }
+
+class TestPercentage(BaseOperationTest):
+    """Test Percentage operation (a/b * 100)."""
+
+    operation_class = Percentage
+    valid_test_cases = {
+       
+        "standard_calculation": {"a": "50", "b": "100", "expected": "50"},
+        "full_percentage": {"a": "100", "b": "100", "expected": "100"},
+        "greater_than_100": {"a": "150", "b": "100", "expected": "150"},
+        "decimal_result": {"a": "1", "b": "3", "expected": "33.33333333333333333333333333"},
+        "zero_dividend": {"a": "0", "b": "5", "expected": "0"},
+        "negative_dividend": {"a": "-50", "b": "100", "expected": "-50"},
+        "negative_divisor": {"a": "50", "b": "-100", "expected": "-50"},
+        "both_negative": {"a": "-50", "b": "-100", "expected": "50"},
+    }
+    invalid_test_cases = {
+        "percentage_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Percentage calculation with zero divisor is not allowed"
         },
     }
 
