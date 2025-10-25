@@ -12,9 +12,11 @@ from app.operations import (
     Power,
     Root,
     Modulus,
-    Percentage,
-    OperationFactory,
     IntegerDivision,
+    Percentage,
+    AbsoluteDifference,
+    OperationFactory,
+    
 )
 
 
@@ -265,6 +267,26 @@ class TestPercentage(BaseOperationTest):
         },
     }
 
+class TestAbsoluteDifference(BaseOperationTest):
+    """Test Absolute Difference operation (|a - b|)."""
+
+    operation_class = AbsoluteDifference
+    valid_test_cases = {
+        # Positive result
+        "standard_positive": {"a": "10", "b": "3", "expected": "7"},
+        # Negative result made positive (|3 - 10| = 7)
+        "reversed_operands": {"a": "3", "b": "10", "expected": "7"},
+        # Negative result from two negative numbers (|-10 - (-3)| = 7)
+        "negative_operands": {"a": "-10", "b": "-3", "expected": "7"},
+        # Result from mixed signs (|-10 - 3| = 13)
+        "mixed_signs": {"a": "-10", "b": "3", "expected": "13"},
+        # Zero difference
+        "equal_operands": {"a": "5", "b": "5", "expected": "0"},
+        "decimal_operands": {"a": "10.5", "b": "3.2", "expected": "7.3"},
+        "decimal_negative_result": {"a": "3.2", "b": "10.5", "expected": "7.3"},
+    }
+    #No invalid cases added due to absolute value
+
 
 
 class TestOperationFactory:
@@ -281,6 +303,8 @@ class TestOperationFactory:
             'root': Root,
             'modulus': Modulus,
             'integer_divide': IntegerDivision,
+            'percentage': Percentage,
+            'absolute_difference': AbsoluteDifference,
         }
 
         for op_name, op_class in operation_map.items():

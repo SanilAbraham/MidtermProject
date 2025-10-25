@@ -345,6 +345,29 @@ class Percentage(Operation):
         self.validate_operands(a, b)
         # Calculate (a / b) * 100
         return (a / b) * Decimal('100')
+    
+class AbsoluteDifference(Operation):
+    """
+    Absolute Difference operation implementation.
+
+    Computes the absolute difference between two numbers: |a - b|.
+    """
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Calculate the absolute difference between a and b.
+
+        Args:
+            a (Decimal): First operand.
+            b (Decimal): Second operand.
+
+        Returns:
+            Decimal: The absolute difference, |a - b|.
+        """
+        # No specific validation needed, as subtraction is always valid.
+        self.validate_operands(a, b) 
+        return abs(a - b)
+
 
     
 class OperationFactory:
@@ -366,7 +389,8 @@ class OperationFactory:
         'root': Root,
         'modulus': Modulus,
         'integer_divide': IntegerDivision,
-        'percentage': Percentage
+        'percentage': Percentage,
+        'absolute_difference': AbsoluteDifference
     }
 
     @classmethod
